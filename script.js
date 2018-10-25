@@ -12,15 +12,18 @@ function main() {
   if (fileName === '') {
     document.getElementById('message').textContent = 'URLに ?(マップデータ名) を添えてアクセスしてください。';
   } else {
-    getData(fileName);
+    getData(fileName, function(wwaData) {
+      setData(wwaData);
+    });
   }
 }
 
 /**
  * データを取得します。取得したデータは setData の実行に渡します。
  * @param {string} fileName 
+ * @param {function} callbackFunction
  */
-function getData(fileName) {
+function getData(fileName, callbackFunction) {
   let worker = new Worker('wwaload.js');
 
   worker.postMessage({
@@ -35,7 +38,7 @@ function getData(fileName) {
       }
     }
     if (e.data.progress === null) {
-      setData(e.data.wwaData);
+      callbackFunction(e.data.wwaData);
     }
   });
 }
