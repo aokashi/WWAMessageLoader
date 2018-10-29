@@ -20,7 +20,8 @@
   "devDependencies": {
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.1.10",
+    "worker-loader": "^2.0.0"
   },
   "dependencies": {
     "vue": "^2.5.17"

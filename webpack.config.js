@@ -8,6 +8,14 @@ module.exports = {
     devServer: {
         contentBase: 'dist'
     },
+    module: {
+        rules: [
+            {
+                test: /\.worker\.js$/,
+                use: { loader: 'worker-loader' }
+            }
+        ]
+    },
     resolve: {
         alias: {
             'vue$': 'vue/dist/vue.esm.js'

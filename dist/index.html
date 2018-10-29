@@ -12,9 +12,8 @@
   </header>
   <div id="app">
     <p>{{ message }}</p>
-    {{ partsMessages }}
     <div>
-      <parts v-for="partsMessage in partsMessages">
+      <parts v-for="(partsMessage, messageID) in partsMessages">
         {{ partsMessage }}
       </parts>
     </div>

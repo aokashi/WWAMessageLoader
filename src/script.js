@@ -3,6 +3,7 @@
 import Vue from "vue";
 import WWAData from "./WWAData";
 import Parts from "./parts";
+import WWALoader from "./wwaload.worker.js";
 
 let app = new Vue({
   el: "#app",
@@ -14,9 +15,9 @@ let app = new Vue({
   comments: Parts
 });
 
-if (app.$fileName !== '') {
-  getData(app.$fileName, function(wwaData) {
-    app.$partsMessages = wwaData['message'];
+if (app.fileName !== '') {
+  getData(app.fileName, function(wwaData) {
+    app.partsMessages = wwaData['message'];
   });
 }
 
@@ -26,21 +27,21 @@ if (app.$fileName !== '') {
  * @param {function} callbackFunction
  */
 function getData(fileName, callbackFunction) {
-  let worker = new Worker('wwaload.js');
+  const worker = new WWALoader(WWALoader);
 
-  // FIXME: Vue.js 上でWeb Workerが利用できない
   worker.postMessage({
     fileName: './' + fileName
   });
   worker.addEventListener('message', (e) => {
     if (e.data.error !== null) {
       try {
-        document.getElementById('message').textContent = e.data.error.message;
+        app.message = e.data.error.message;
       } catch {
-        document.getElementById('message').textContent = '原因不明のエラーが発生しました。';
+        app.message = '原因不明のエラーが発生しました。';
       }
     }
     if (e.data.progress === null) {
+      console.log(e.data);
       callbackFunction(e.data.wwaData);
     }
   });
