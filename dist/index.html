@@ -11,9 +11,13 @@
     <h1>WWA MessageLoader</h1>
   </header>
   <div id="app">
+    <div>
+      <input v-model="fileName" type="text">
+      <button v-on:click="get">送信</button>
+    </div>
     <p>{{ message }}</p>
     <div>
-      <parts v-for="(partsMessage, messageID) in partsMessages">
+      <parts v-for="(partsMessage, messageID) in partsMessages" v-if="messageID !== ''" v-bind:number="messageID">
         {{ partsMessage }}
       </parts>
     </div>

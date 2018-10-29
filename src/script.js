@@ -8,25 +8,34 @@ import WWALoader from "./wwaload.worker.js";
 let app = new Vue({
   el: "#app",
   data: {
-    fileName: document.location.search.substr(1),
+    fileName: '',
     message: 'URLに ?(マップデータ名) を添えてアクセスしてください。',
     partsMessages: {}
   },
-  comments: Parts
+  methods: {
+    get: function (event) {
+      getData(this.fileName, (wwaData) => {
+        this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
+        this.partsMessages = wwaData['message'];
+      }, (error) => {
+        try {
+          this.message = error.message;
+        } catch {
+          this.message = '不明なエラーが発生しました。';
+        }
+      });
+    }
+  },
+  components: Parts
 });
-
-if (app.fileName !== '') {
-  getData(app.fileName, function(wwaData) {
-    app.partsMessages = wwaData['message'];
-  });
-}
 
 /**
  * データを取得します。
  * @param {string} fileName 
  * @param {function} callbackFunction
+ * @param {function} console.error
  */
-function getData(fileName, callbackFunction) {
+function getData(fileName, callbackFunction, errorFunction) {
   const worker = new WWALoader(WWALoader);
 
   worker.postMessage({
@@ -34,14 +43,9 @@ function getData(fileName, callbackFunction) {
   });
   worker.addEventListener('message', (e) => {
     if (e.data.error !== null) {
-      try {
-        app.message = e.data.error.message;
-      } catch {
-        app.message = '原因不明のエラーが発生しました。';
-      }
+      errorFunction(e.data.error);
     }
     if (e.data.progress === null) {
-      console.log(e.data);
       callbackFunction(e.data.wwaData);
     }
   });
