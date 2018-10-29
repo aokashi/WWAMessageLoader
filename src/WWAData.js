@@ -1,4 +1,4 @@
-class WWAData {
+export default class WWAData {
   /**
    * WWAのデータです。
    * @param {array} wwaData 

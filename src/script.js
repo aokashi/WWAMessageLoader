@@ -1,31 +1,34 @@
 'use strict';
 
-addEventListener('load', () => {
-  main();
+import Vue from "vue";
+import WWAData from "./WWAData";
+import Parts from "./parts";
+
+let app = new Vue({
+  el: "#app",
+  data: {
+    fileName: document.location.search.substr(1),
+    message: 'URLに ?(マップデータ名) を添えてアクセスしてください。',
+    partsMessages: {}
+  },
+  comments: Parts
 });
 
-/**
- * メイン関数です。
- */
-function main() {
-  let fileName = document.location.search.substr(1);
-  if (fileName === '') {
-    document.getElementById('message').textContent = 'URLに ?(マップデータ名) を添えてアクセスしてください。';
-  } else {
-    getData(fileName, function(wwaData) {
-      setData(wwaData);
-    });
-  }
+if (app.$fileName !== '') {
+  getData(app.$fileName, function(wwaData) {
+    app.$partsMessages = wwaData['message'];
+  });
 }
 
 /**
- * データを取得します。取得したデータは setData の実行に渡します。
+ * データを取得します。
  * @param {string} fileName 
  * @param {function} callbackFunction
  */
 function getData(fileName, callbackFunction) {
   let worker = new Worker('wwaload.js');
 
+  // FIXME: Vue.js 上でWeb Workerが利用できない
   worker.postMessage({
     fileName: './' + fileName
   });
