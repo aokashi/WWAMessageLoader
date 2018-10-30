@@ -17,7 +17,10 @@
     </div>
     <p>{{ message }}</p>
     <div>
-      <parts v-for="(partsMessage, messageID) in partsMessages" v-if="messageID !== ''" v-bind:number="messageID">
+      <parts
+        v-for="(partsMessage, messageID) in partsMessages"
+        :key="messageID"
+        v-bind:number="messageID">
         {{ partsMessage }}
       </parts>
     </div>
