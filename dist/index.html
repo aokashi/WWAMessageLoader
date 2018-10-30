@@ -17,10 +17,15 @@
     </div>
     <p>{{ message }}</p>
     <div>
+      <!-- FIXME: 下記実行をしても各パーツの番号を取得してくれない -->
       <parts
-        v-for="(partsMessage, messageID) in partsMessages"
+        v-for="(partsMessage, messageID) in partsMessagesWithoutEmptyMessage"
         :key="messageID"
-        v-bind:number="messageID">
+        :number="messageID"
+
+        :parts-type="$emit('get-parts-number', messageID).partsType"
+        :parts-number="$emit('get-parts-number', messageID).number"
+        @get-parts-number="getPartsNumber">
         {{ partsMessage }}
       </parts>
     </div>

@@ -14,6 +14,17 @@ let app = new Vue({
     objectAttributes: {},
     mapAttributes: {}
   },
+  computed: {
+    partsMessagesWithoutEmptyMessage: function() {
+      let result = {};
+      for (let key in this.partsMessages) {
+        if (this.partsMessages[key] !== '') {
+          result[key] = this.partsMessages[key];
+        }
+      }
+      return result;
+    }
+  },
   methods: {
 
     get: function (event) {
@@ -35,9 +46,6 @@ let app = new Vue({
     getPartsNumber: function(messageID) {
       const ATR_MESSAGE = 5;
 
-      console.log(this);
-      // FIXME: HTMLファイル側から呼び出すと objectAttributes が見つからないと怒られる
-      // TODO: 下記処理をコンポーネントに移行したいものの、WWAのパーツ属性のデータをコンポネントに置きたくないので、どうするか考える
       const objectPartsIndex = this.objectAttributes.findIndex((attributes) => {
         return attributes[ATR_MESSAGE] === messageID;
       });
@@ -59,12 +67,11 @@ let app = new Vue({
       }
 
       return {
-        partsType: null,
-        number: null
+        partsType: 0,
+        number: 0
       };
     }
-  },
-  components: Parts
+  }
 });
 
 /**
