@@ -21,10 +21,8 @@
       <parts
         v-for="(partsMessage, messageID) in partsMessagesWithoutEmptyMessage"
         :key="messageID"
-        :number="messageID"
+        :number="parseInt(messageID)"
 
-        :parts-type="$emit('get-parts-number', messageID).partsType"
-        :parts-number="$emit('get-parts-number', messageID).number"
         @get-parts-number="getPartsNumber">
         {{ partsMessage }}
       </parts>

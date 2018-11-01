@@ -7,7 +7,6 @@ export default Vue.component('parts', {
         partsType: Number,
         partsNumber: Number
     },
-    // FIXME: 引数 number が文字列の状態で受け取ってしまう
     template: `
     <section>
         <h3>
@@ -17,6 +16,13 @@ export default Vue.component('parts', {
         <div><slot></slot></div>
     </section>
     `,
+    // FIXME: getPartsNumberメソッドを自動実行しているが、親コンポーネントのメソッドがうまく伝わらない
+    created: function() {
+        let partsNumber = this.$emit('get-parts-number', this.number);
+
+        this.partsType = partsNumber.partsType;
+        this.partsNumber = partsNumber.number;
+    },
     methods: {
         getPartsTypeName: function(partsType) {
             switch (partsType) {
