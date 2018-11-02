@@ -28,25 +28,29 @@ let app = new Vue({
   methods: {
 
     get: function (event) {
-      getData(this.fileName, (wwaData) => {
-        this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
+      const self = this;
 
-        this.partsMessages = wwaData['message'];
-        this.objectAttributes = wwaData['objectAttributes'];
-        this.mapAttributes = wwaData['mapAttributes'];
-      }, (error) => {
+      getData(this.fileName, function (wwaData) {
+        self.message = self.fileName + ' から読み込んだメッセージの一覧です。';
+
+        self.partsMessages = wwaData['message'];
+        self.objectAttributes = wwaData['objectAttributes'];
+        self.mapAttributes = wwaData['mapAttributes'];
+      }, function (error) {
         try {
-          this.message = error.message;
+          self.message = error.message;
         } catch {
-          this.message = '不明なエラーが発生しました。';
+          self.message = '不明なエラーが発生しました。';
         }
       });
     },
 
     getPartsNumber: function(messageID) {
       const ATR_MESSAGE = 5;
+      const self = this;
 
-      const objectPartsIndex = this.objectAttributes.findIndex((attributes) => {
+      // FIXME: self.objectAttributes is undefined
+      const objectPartsIndex = self.objectAttributes.findIndex(function (attributes) {
         return attributes[ATR_MESSAGE] === messageID;
       });
       if (objectPartsIndex !== -1) {
@@ -56,7 +60,7 @@ let app = new Vue({
         }
       }
 
-      const mapPartsIndex = this.mapAttributes.findIndex((attributes) => {
+      const mapPartsIndex = self.mapAttributes.findIndex(function (attributes) {
         return attributes[ATR_MESSAGE] === messageID;
       });
       if (mapPartsIndex !== -1) {
@@ -71,6 +75,9 @@ let app = new Vue({
         number: 0
       };
     }
+  },
+  components: {
+    Parts
   }
 });
 

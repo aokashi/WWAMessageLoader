@@ -3,9 +3,13 @@ import * as PartsType from "./partsType";
 
 export default Vue.component('parts', {
     props: {
-        number: Number,
-        partsType: Number,
-        partsNumber: Number
+        number: Number
+    },
+    data: function() {
+        return {
+            partsType: 0,
+            partsNumber: 0
+        }
     },
     template: `
     <section>
@@ -16,7 +20,6 @@ export default Vue.component('parts', {
         <div><slot></slot></div>
     </section>
     `,
-    // FIXME: getPartsNumberメソッドを自動実行しているが、親コンポーネントのメソッドがうまく伝わらない
     created: function() {
         let partsNumber = this.$emit('get-parts-number', this.number);
 
