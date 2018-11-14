@@ -43,37 +43,6 @@ let app = new Vue({
           self.message = '不明なエラーが発生しました。';
         }
       });
-    },
-
-    getPartsNumber: function(messageID) {
-      const ATR_MESSAGE = 5;
-      const self = this;
-
-      // FIXME: self.objectAttributes is undefined
-      const objectPartsIndex = self.objectAttributes.findIndex(function (attributes) {
-        return attributes[ATR_MESSAGE] === messageID;
-      });
-      if (objectPartsIndex !== -1) {
-        return {
-          partsType: PartsType.PARTSTYPE_OBJECT,
-          number: objectPartsIndex
-        }
-      }
-
-      const mapPartsIndex = self.mapAttributes.findIndex(function (attributes) {
-        return attributes[ATR_MESSAGE] === messageID;
-      });
-      if (mapPartsIndex !== -1) {
-        return {
-          partsType: PartsType.PARTSTYPE_MAP,
-          number: mapPartsIndex
-        }
-      }
-
-      return {
-        partsType: 0,
-        number: 0
-      };
     }
   },
   components: {

@@ -17,13 +17,10 @@
     </div>
     <p>{{ message }}</p>
     <div>
-      <!-- FIXME: 下記実行をしても各パーツの番号を取得してくれない -->
       <parts
         v-for="(partsMessage, messageID) in partsMessagesWithoutEmptyMessage"
         :key="messageID"
-        :number="parseInt(messageID)"
-
-        @get-parts-number="getPartsNumber">
+        :number="parseInt(messageID)">
         {{ partsMessage }}
       </parts>
     </div>
