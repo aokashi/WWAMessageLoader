@@ -3,29 +3,17 @@ import * as PartsType from "./partsType";
 
 export default Vue.component('parts', {
     props: {
-        number: Number
-    },
-    data: function() {
-        return {
-            partsType: 0,
-            partsNumber: 0
-        }
+        parts: Object
     },
     template: `
     <section>
         <h3>
-            <span v-if="partsNumber !== 0">{{ this.getPartsTypeName(partsType) }}{{ partsNumber }}番 (メッセージ番号 {{ number }}番)</span>
-            <span v-else>{{ number }}番</span>
+            <span v-if="parts.partsNumber !== 0">{{ this.getPartsTypeName(parts.partsType) }}{{ parts.partsNumber }}番 (メッセージ番号 {{ parts.number }}番)</span>
+            <span v-else>{{ parts.number }}番</span>
         </h3>
         <div><slot></slot></div>
     </section>
     `,
-    created: function() {
-        let partsNumber = this.$emit('get-parts-number', this.number);
-
-        this.partsType = partsNumber.partsType;
-        this.partsNumber = partsNumber.number;
-    },
     methods: {
         getPartsTypeName: function(partsType) {
             switch (partsType) {

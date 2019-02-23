@@ -5,22 +5,33 @@ import Parts from "./parts";
 import * as PartsType from "./partsType";
 import WWALoader from "./wwaload.worker.js";
 
+const ATTR_MESSAGE = 5;
+
 let app = new Vue({
   el: "#app",
   data: {
     fileName: '',
-    message: 'URLに ?(マップデータ名) を添えてアクセスしてください。',
+    message: 'テキストフォームにマップデータファイル名を入力し、「送信」ボタンを押してください。',
     partsMessages: {},
     objectAttributes: {},
     mapAttributes: {}
   },
   computed: {
-    partsMessagesWithoutEmptyMessage: function() {
+    partsObjects: function() {
       let result = {};
+
       for (let key in this.partsMessages) {
-        if (this.partsMessages[key] !== '') {
-          result[key] = this.partsMessages[key];
+        if (this.partsMessages[key] === '') {
+          continue;
         }
+
+        let partsInfo = this.makePartsNumber(parseInt(key));
+        result[key] = {
+          number: key,
+          message: this.partsMessages[key],
+          partsType: partsInfo.partsType,
+          partsNumber: partsInfo.number
+        };
       }
       return result;
     }
@@ -34,8 +45,8 @@ let app = new Vue({
         self.message = self.fileName + ' から読み込んだメッセージの一覧です。';
 
         self.partsMessages = wwaData['message'];
-        self.objectAttributes = wwaData['objectAttributes'];
-        self.mapAttributes = wwaData['mapAttributes'];
+        self.objectAttributes = wwaData['objectAttribute'];
+        self.mapAttributes = wwaData['mapAttribute'];
       }, function (error) {
         try {
           self.message = error.message;
@@ -43,6 +54,36 @@ let app = new Vue({
           self.message = '不明なエラーが発生しました。';
         }
       });
+    },
+
+    /**
+     * @param {number} messageID 
+     */
+    makePartsNumber: function(messageID) {
+      const objectPartsIndex = this.objectAttributes.findIndex(function (attributes) {
+        return attributes[ATTR_MESSAGE] === messageID;
+      });
+      if (objectPartsIndex !== -1) {
+        return {
+          partsType: PartsType.PARTSTYPE_OBJECT,
+          number: objectPartsIndex
+        }
+      }
+  
+      const mapPartsIndex = this.mapAttributes.findIndex(function (attributes) {
+        return attributes[ATTR_MESSAGE] === messageID;
+      });
+      if (mapPartsIndex !== -1) {
+        return {
+          partsType: PartsType.PARTSTYPE_MAP,
+          number: mapPartsIndex
+        }
+      }
+  
+      return {
+        partsType: PartsType.PARTSTYPE_UNDEFINED,
+        number: 0
+      };
     }
   },
   components: {

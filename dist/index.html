@@ -18,10 +18,10 @@
     <p>{{ message }}</p>
     <div>
       <parts
-        v-for="(partsMessage, messageID) in partsMessagesWithoutEmptyMessage"
+        v-for="(partsObject, messageID) in partsObjects"
         :key="messageID"
-        :number="parseInt(messageID)">
-        {{ partsMessage }}
+        :parts="partsObject">
+        {{ partsObject.message }}
       </parts>
     </div>
   </div>
