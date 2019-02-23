@@ -1,7 +1,7 @@
 'use strict';
 
 import Vue from "vue";
-import Parts from "./parts";
+import WWAParts from "./components/wwa-parts";
 import * as PartsType from "./partsType";
 import WWALoader from "./wwaload.worker.js";
 
@@ -87,7 +87,7 @@ let app = new Vue({
     }
   },
   components: {
-    Parts
+    Parts: WWAParts
   }
 });
 

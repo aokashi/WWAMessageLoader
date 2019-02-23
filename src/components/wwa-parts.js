@@ -1,7 +1,7 @@
 import Vue from "vue";
-import * as PartsType from "./partsType";
+import * as PartsType from "../partsType";
 
-export default Vue.component('parts', {
+export default Vue.component('wwa-parts', {
     props: {
         parts: Object
     },

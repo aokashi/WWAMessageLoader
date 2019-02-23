@@ -17,12 +17,12 @@
     </div>
     <p>{{ message }}</p>
     <div>
-      <parts
+      <wwa-parts
         v-for="(partsObject, messageID) in partsObjects"
         :key="messageID"
         :parts="partsObject">
         {{ partsObject.message }}
-      </parts>
+      </wwa-parts>
     </div>
   </div>
   <script src="script.js"></script>
