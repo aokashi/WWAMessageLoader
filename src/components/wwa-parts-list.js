@@ -1,5 +1,6 @@
 import Vue from "vue";
 import wwaParts from "./wwa-parts";
+import searchBox from "./search-box";
 import * as PartsType from "../partsType";
 
 const ATTR_MESSAGE = 5;
@@ -13,6 +14,7 @@ export default Vue.component('wwa-parts-list', {
   },
   template: `
     <div>
+      <search-box v-on:search="setSearch"></search-box>
       <wwa-parts
         v-for="(partsObject, messageID) in partsObjects"
         :key="messageID"
@@ -25,7 +27,12 @@ export default Vue.component('wwa-parts-list', {
     return {
       partsMessages: {},
       objectAttributes: {},
-      mapAttributes: {}
+      mapAttributes: {},
+      search: {
+        query: '',
+        type: PartsType.PARTSTYPE_UNDEFINED,
+        onlyPartsMessage: false
+      }
     };
   },
   created: function() {
@@ -35,7 +42,11 @@ export default Vue.component('wwa-parts-list', {
   },
   computed: {
     /**
-     * @returns {array}
+     * @returns {array} 以下の情報を格納する配列
+     *   number: パーツ番号(message配列内のインデックス),
+     *   message: メッセージの文字列,
+     *   partsType: パーツの種類,
+     *   partsNumber: パーツ番号
      */
     partsObjects: function() {
       let result = {};
@@ -44,11 +55,22 @@ export default Vue.component('wwa-parts-list', {
         if (this.partsMessages[key] === '') {
           continue;
         }
-    
+        
         let partsInfo = this.makePartsNumber(parseInt(key));
-          result[key] = {
+        let partsMessage = this.partsMessages[key];
+        if (this.search.query !== '' && partsMessage.indexOf(this.search.query) === -1) {
+          continue;
+        }
+        if (this.search.type !== PartsType.PARTSTYPE_UNDEFINED && partsInfo.partsType !== this.search.type) {
+          continue;
+        }
+        if (this.search.onlyPartsMessage && partsInfo.number === 0) {
+          continue;
+        }
+
+        result[key] = {
           number: key,
-          message: this.partsMessages[key],
+          message: partsMessage,
           partsType: partsInfo.partsType,
           partsNumber: partsInfo.number
         };
@@ -85,9 +107,17 @@ export default Vue.component('wwa-parts-list', {
         partsType: PartsType.PARTSTYPE_UNDEFINED,
         number: 0
       };
+    },
+    /**
+     * 検索を行います。
+     * @param {Object} search 
+     */
+    setSearch: function(search) {
+      this.search = search;
     }
   },
   components: {
-    'wwa-parts': wwaParts
+    'wwa-parts': wwaParts,
+    'search-box': searchBox
   }
 });
