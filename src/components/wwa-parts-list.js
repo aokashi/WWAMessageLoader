@@ -13,32 +13,26 @@ export default Vue.component('wwa-parts-list', {
     }
   },
   template: `
-    <div>
+    <div class="parts-list">
       <search-box v-on:search="setSearch"></search-box>
-      <wwa-parts
-        v-for="(partsObject, messageID) in partsObjects"
-        :key="messageID"
-        :parts="partsObject">
-        {{ partsObject.message }}
-      </wwa-parts>
+      <div class="parts-list__list">
+        <wwa-parts
+          v-for="(partsObject, messageID) in partsObjects"
+          :key="messageID"
+          :parts="partsObject">
+          {{ partsObject.message }}
+        </wwa-parts>
+      </div>
     </div>
   `,
   data: function() {
     return {
-      partsMessages: {},
-      objectAttributes: {},
-      mapAttributes: {},
       search: {
         query: '',
         type: PartsType.PARTSTYPE_UNDEFINED,
         onlyPartsMessage: false
       }
     };
-  },
-  created: function() {
-    this.partsMessages = this.wwaData['message'];
-    this.objectAttributes = this.wwaData['objectAttribute'];
-    this.mapAttributes = this.wwaData['mapAttribute'];
   },
   computed: {
     /**
@@ -50,17 +44,19 @@ export default Vue.component('wwa-parts-list', {
      */
     partsObjects: function() {
       let result = {};
+      console.log(this.wwaData);
     
-      for (let key in this.partsMessages) {
-        if (this.partsMessages[key] === '') {
+      for (let key in this.wwaData['message']) {
+        if (this.wwaData['message'][key] === '') {
+          continue;
+        }
+        
+        let partsMessage = this.wwaData['message'][key];
+        if (this.search.query !== '' && partsMessage.indexOf(this.search.query) === -1) {
           continue;
         }
         
         let partsInfo = this.makePartsNumber(parseInt(key));
-        let partsMessage = this.partsMessages[key];
-        if (this.search.query !== '' && partsMessage.indexOf(this.search.query) === -1) {
-          continue;
-        }
         if (this.search.type !== PartsType.PARTSTYPE_UNDEFINED && partsInfo.partsType !== this.search.type) {
           continue;
         }
@@ -68,11 +64,23 @@ export default Vue.component('wwa-parts-list', {
           continue;
         }
 
+        let hasPartsInMap = false;
+        if (partsInfo.number !== 0) {
+          let currentMap =
+            PartsType.PARTSTYPE_OBJECT ? this.wwaData['mapObject'] :
+            PartsType.PARTSTYPE_MAP ? this.wwaData['map'] : [];
+
+          hasPartsInMap = currentMap.find(function (mapLine) {
+            return mapLine.indexOf(partsInfo.number) !== -1;
+          }) !== undefined;
+        }
+
         result[key] = {
           number: key,
           message: partsMessage,
           partsType: partsInfo.partsType,
-          partsNumber: partsInfo.number
+          partsNumber: partsInfo.number,
+          hasPartsInMap: hasPartsInMap
         };
       }
       return result;
@@ -81,9 +89,12 @@ export default Vue.component('wwa-parts-list', {
   methods: {
     /**
      * @param {number} messageID 
+     * @return {array} 以下の情報を返す連想配列
+     *   partsType: パーツ種類
+     *   number: パーツ番号
      */
     makePartsNumber: function(messageID) {
-      const objectPartsIndex = this.objectAttributes.findIndex(function (attributes) {
+      const objectPartsIndex = this.wwaData['objectAttribute'].findIndex(function (attributes) {
         return attributes[ATTR_MESSAGE] === messageID;
       });
       if (objectPartsIndex !== -1) {
@@ -93,7 +104,7 @@ export default Vue.component('wwa-parts-list', {
         }
       }
       
-      const mapPartsIndex = this.mapAttributes.findIndex(function (attributes) {
+      const mapPartsIndex = this.wwaData['mapAttribute'].findIndex(function (attributes) {
         return attributes[ATTR_MESSAGE] === messageID;
       });
       if (mapPartsIndex !== -1) {

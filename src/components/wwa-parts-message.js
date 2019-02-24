@@ -8,8 +8,8 @@ export default Vue.component('wwa-parts-message', {
     }
   },
   template: `
-    <div>
-      <div v-for="(messageLine, messageIndex) in partsMessageEachLine">
+    <div class="parts-message">
+      <div class="parts-message__line" v-for="(messageLine, messageIndex) in partsMessageEachLine">
         {{ messageLine }}
       </div>
     </div>
