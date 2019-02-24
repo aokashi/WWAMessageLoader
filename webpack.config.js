@@ -3,7 +3,7 @@ module.exports = {
     entry: './src/script.js',
     output: {
         path: __dirname + '/dist',
-        filename: 'script.js'
+        filename: 'wwa_message_loader.js'
     },
     devServer: {
         contentBase: 'dist'
@@ -12,7 +12,12 @@ module.exports = {
         rules: [
             {
                 test: /\.worker\.js$/,
-                use: { loader: 'worker-loader' }
+                use: {
+                    loader: 'worker-loader',
+                    options: {
+                        name: 'wwa_message_loader.worker.js'
+                    }
+                }
             }
         ]
     },

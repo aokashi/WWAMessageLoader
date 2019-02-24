@@ -44,7 +44,6 @@ export default Vue.component('wwa-parts-list', {
      */
     partsObjects: function() {
       let result = {};
-      console.log(this.wwaData);
     
       for (let key in this.wwaData['message']) {
         if (this.wwaData['message'][key] === '') {
