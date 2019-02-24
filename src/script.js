@@ -1,39 +1,22 @@
 'use strict';
 
 import Vue from "vue";
-import WWAParts from "./components/wwa-parts";
-import * as PartsType from "./partsType";
+import wwaPartsList from "./components/wwa-parts-list";
 import WWALoader from "./wwaload.worker.js";
-
-const ATTR_MESSAGE = 5;
 
 let app = new Vue({
   el: "#app",
   data: {
     fileName: '',
     message: 'テキストフォームにマップデータファイル名を入力し、「送信」ボタンを押してください。',
-    partsMessages: {},
-    objectAttributes: {},
-    mapAttributes: {}
+    wwaData: {}
   },
   computed: {
-    partsObjects: function() {
-      let result = {};
-
-      for (let key in this.partsMessages) {
-        if (this.partsMessages[key] === '') {
-          continue;
-        }
-
-        let partsInfo = this.makePartsNumber(parseInt(key));
-        result[key] = {
-          number: key,
-          message: this.partsMessages[key],
-          partsType: partsInfo.partsType,
-          partsNumber: partsInfo.number
-        };
-      }
-      return result;
+    /**
+     * @returns {boolean}
+     */
+    hasMessage: function() {
+      return Object.entries(this.wwaData).length > 0;
     }
   },
   methods: {
@@ -43,10 +26,7 @@ let app = new Vue({
 
       getData(this.fileName, function (wwaData) {
         self.message = self.fileName + ' から読み込んだメッセージの一覧です。';
-
-        self.partsMessages = wwaData['message'];
-        self.objectAttributes = wwaData['objectAttribute'];
-        self.mapAttributes = wwaData['mapAttribute'];
+        self.wwaData = wwaData;
       }, function (error) {
         try {
           self.message = error.message;
@@ -56,38 +36,9 @@ let app = new Vue({
       });
     },
 
-    /**
-     * @param {number} messageID 
-     */
-    makePartsNumber: function(messageID) {
-      const objectPartsIndex = this.objectAttributes.findIndex(function (attributes) {
-        return attributes[ATTR_MESSAGE] === messageID;
-      });
-      if (objectPartsIndex !== -1) {
-        return {
-          partsType: PartsType.PARTSTYPE_OBJECT,
-          number: objectPartsIndex
-        }
-      }
-  
-      const mapPartsIndex = this.mapAttributes.findIndex(function (attributes) {
-        return attributes[ATTR_MESSAGE] === messageID;
-      });
-      if (mapPartsIndex !== -1) {
-        return {
-          partsType: PartsType.PARTSTYPE_MAP,
-          number: mapPartsIndex
-        }
-      }
-  
-      return {
-        partsType: PartsType.PARTSTYPE_UNDEFINED,
-        number: 0
-      };
-    }
   },
   components: {
-    Parts: WWAParts
+    'wwa-parts-list': wwaPartsList,
   }
 });
 

@@ -16,14 +16,11 @@
       <button v-on:click="get">送信</button>
     </div>
     <p>{{ message }}</p>
-    <div>
-      <wwa-parts
-        v-for="(partsObject, messageID) in partsObjects"
-        :key="messageID"
-        :parts="partsObject">
-        {{ partsObject.message }}
-      </wwa-parts>
-    </div>
+    <wwa-parts-list
+      v-if="hasMessage"
+      :wwa-data="wwaData"
+    >
+    </wwa-parts-list>
   </div>
   <script src="script.js"></script>
 </body>
