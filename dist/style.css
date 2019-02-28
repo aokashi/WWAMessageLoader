@@ -1,0 +1,39 @@
+
+.parts-list__list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.parts-item {
+  flex: 0 0 360px;
+}
+
+.search-box__type-label--object,
+.parts-item--object .parts-item__title {
+  color: #c00000;
+  color:
+}
+
+.search-box__type-label--map,
+.parts-item--map .parts-item__title {
+  color: #0000c0;
+}
+
+.parts-item__no-put-warn {
+  background-color: #ffffc0;
+  color: #808000;
+  display: inline-block;
+  font-size: .8rem;
+  font-weight: bold;
+  margin: 4px;
+  padding: 4px;
+}
+
+.parts-message {
+  border: 2px solid #808080;
+  border-radius: 10px;
+  font-size: 16px;
+  margin: 10px;
+  padding: 7px;
+  width: 340px;
+}
