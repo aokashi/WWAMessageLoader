@@ -2,7 +2,9 @@
 
 import Vue from "vue";
 import wwaPartsList from "./components/wwa-parts-list";
-import WWALoader from "./wwaload.worker.js";
+
+import { BrowserEventEmitter } from "@wwawing/event-emitter";
+import { WWALoader } from "@wwawing/loader";
 
 let app = new Vue({
   el: "#app",
@@ -49,17 +51,18 @@ let app = new Vue({
  * @param {function} console.error
  */
 function getData(fileName, callbackFunction, errorFunction) {
-  const worker = new WWALoader(WWALoader);
+  const eventEmitter = new BrowserEventEmitter();
+  const loader = new WWALoader(fileName, eventEmitter);
 
-  worker.postMessage({
-    fileName: './' + fileName
+  const mapdataListener = eventEmitter.addListener("mapData", wwaMap => {
+    eventEmitter.removeListener("mapData", mapdataListener);
+    eventEmitter.removeListener("error", errorListener);
+    callbackFunction(wwaMap);
   });
-  worker.addEventListener('message', (e) => {
-    if (e.data.error !== null) {
-      errorFunction(e.data.error);
-    }
-    if (e.data.progress === null) {
-      callbackFunction(e.data.wwaData);
-    }
+
+  const errorListener = eventEmitter.addListener("error", error => {
+    errorFunction(error);
   });
+
+  loader.requestAndLoadMapData();
 }
