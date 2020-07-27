@@ -61,7 +61,7 @@ function getData(fileName, callbackFunction, errorFunction) {
   });
 
   const errorListener = eventEmitter.addListener("error", error => {
-    errorFunction(error.message);
+    errorFunction(error);
   });
 
   loader.requestAndLoadMapData();
