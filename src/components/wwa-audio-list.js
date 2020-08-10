@@ -2,7 +2,11 @@ import Vue from "vue";
 
 import wwaAudioPartsList from "./wwa-audio-parts-list";
 
+const ATTR_TYPE = 3;
+const OBJECT_RANDOM = 16;
 const ATTR_SOUND = 19;
+const BGM_LB = 70;
+const NO_SOUND = 99;
 
 export default Vue.component('wwa-audio-list', {
   props: {
@@ -23,7 +27,7 @@ export default Vue.component('wwa-audio-list', {
         >
           <div class="audio-item__number">{{audioItem.number}} 番</div>
 
-          <audio :src="'audio/' + audioItem.number + '.mp3'"></audio>
+          <audio :src="'audio/' + audioItem.number + '.mp3'" controls :loop="isBGM(audioItem.number)"></audio>
 
           <wwa-audio-parts-list
             title="使用されている物体パーツ"
@@ -55,9 +59,12 @@ export default Vue.component('wwa-audio-list', {
 
       const getSoundNumber = function (addItemFn) {
         return (partsAttribute, partsNumber) => {
-          const soundNumber = partsAttribute[ATTR_SOUND];
+          if (partsAttribute[ATTR_TYPE] === OBJECT_RANDOM) {
+            return;
+          }
 
-          if (soundNumber === 0 || partsNumber === 0) {
+          const soundNumber = partsAttribute[ATTR_SOUND];
+          if (soundNumber === 0 || soundNumber === NO_SOUND || partsNumber === 0) {
             return;
           }
 
@@ -85,6 +92,11 @@ export default Vue.component('wwa-audio-list', {
       }));
       
       return usedSounds;
+    }
+  },
+  methods: {
+    isBGM: function(soundNumber) {
+      return soundNumber >= BGM_LB;
     }
   },
   component: {

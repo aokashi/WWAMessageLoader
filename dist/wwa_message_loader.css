@@ -56,7 +56,7 @@
 }
 
 .audio-list__item {
-  flex: 0 0 auto;
+  flex: 0 0 270px;
   padding: .5rem;
 }
 
