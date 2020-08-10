@@ -64,6 +64,15 @@
   font-weight: 700;
 }
 
+.audio-item__is-bgm {
+  background-color: #c0ffc0;
+  color: #008000;
+  display: inline-block;
+  font-size: .8rem;
+  margin: 4px;
+  padding: 4px;
+}
+
 .audio-parts-list {
   padding: .5rem;
 }

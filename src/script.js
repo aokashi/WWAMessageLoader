@@ -21,6 +21,13 @@ let app = new Vue({
      */
     hasMessage: function() {
       return Object.entries(this.wwaData).length > 0;
+    },
+    directoryPath: function() {
+      const directoryPath = this.fileName.split("/").slice(0, -1).join("/");
+      if (directoryPath === "") {
+        return ".";
+      }
+      return directoryPath;
     }
   },
   methods: {

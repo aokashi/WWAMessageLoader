@@ -11,8 +11,12 @@ export default Vue.component('wwa-audio-list', {
   props: {
     wwaData: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+    directoryPath: {
+      type: String,
+      default: '.',
+    },
   },
   template: `
     <div class="audio-list">
@@ -25,6 +29,7 @@ export default Vue.component('wwa-audio-list', {
           :audio-number="audioItem.number"
           :object-parts-numbers="audioItem.objectParts"
           :map-parts-numbers="audioItem.mapParts"
+          :directory-path="directoryPath"
         ></wwa-audio-item>
       </div>
     </div>

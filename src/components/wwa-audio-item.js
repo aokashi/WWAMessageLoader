@@ -17,15 +17,22 @@ export default Vue.component('wwa-audio-item', {
     mapPartsNumbers: {
       type: Array,
       default: [],
-    }
+    },
+    directoryPath: {
+      type: String,
+      default: '.'
+    },
   },
   template: `
     <div
       class="audio-list__item audio-item"
     >
-      <div class="audio-item__number">{{audioNumber}} 番</div>
+      <div class="audio-item__number">
+        {{audioNumber}} 番
+        <span class="audio-item__is-bgm" v-if="isBGM">BGM</span>
+      </div>
 
-      <audio :src="'audio/' + audioNumber + '.mp3'" controls :loop="isBGM"></audio>
+      <audio :src="directoryPath + '/audio/' + audioNumber + '.mp3'" controls preload="none" :loop="isBGM"></audio>
 
       <wwa-audio-parts-list
         title="使用されている物体パーツ"
@@ -44,11 +51,6 @@ export default Vue.component('wwa-audio-item', {
   computed: {
     isBGM() {
       return this.audioNumber >= BGM_LB;
-    }
-  },
-  methods: {
-    play() {
-      // TODO: 実装する
     }
   },
   component: {
