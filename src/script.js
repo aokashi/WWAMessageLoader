@@ -2,6 +2,7 @@
 
 import Vue from "vue";
 import wwaPartsList from "./components/wwa-parts-list";
+import wwaAudioList from "./components/wwa-audio-list";
 
 import { BrowserEventEmitter } from "@wwawing/event-emitter";
 import { WWALoader } from "@wwawing/loader";
@@ -11,6 +12,7 @@ let app = new Vue({
   data: {
     fileName: '',
     message: 'テキストフォームにマップデータファイル名を入力し、「送信」ボタンを押してください。',
+    viewType: '',
     wwaData: {}
   },
   computed: {
@@ -23,24 +25,31 @@ let app = new Vue({
   },
   methods: {
 
-    get: function (event) {
-      const self = this;
-
-      getData(this.fileName, function (wwaData) {
-        self.message = self.fileName + ' から読み込んだメッセージの一覧です。';
-        self.wwaData = wwaData;
-      }, function (error) {
+    get: function () {
+      getData(this.fileName, wwaData => {
+        this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
+        this.viewType = "MESSAGE";
+        this.wwaData = wwaData;
+      }, error => {
         try {
-          self.message = error.message;
+          this.message = error.message;
         } catch {
-          self.message = '不明なエラーが発生しました。';
+          this.message = '不明なエラーが発生しました。';
         }
       });
     },
 
+    /**
+     * @param {string} type 
+     */
+    selectType: function(type) {
+      this.viewType = type;
+    }
+
   },
   components: {
     'wwa-parts-list': wwaPartsList,
+    'wwa-audio-list': wwaAudioList,
   }
 });
 

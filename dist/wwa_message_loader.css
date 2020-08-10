@@ -1,4 +1,8 @@
 
+.wml__nav {
+  margin-bottom: 1rem;
+}
+
 .parts-list__list {
   display: flex;
   flex-wrap: wrap;
@@ -9,14 +13,17 @@
 }
 
 .search-box__type-label--object,
-.parts-item--object .parts-item__title {
+.parts-item--object .parts-item__title,
+.audio-item__parts-list--object .audio-parts-list__title {
   color: #c00000;
 }
 
 .search-box__type-label--map,
-.parts-item--map .parts-item__title {
+.parts-item--map .parts-item__title,
+.audio-item__parts-list--map .audio-parts-list__title {
   color: #0000c0;
 }
+
 
 .parts-item__no-put-warn {
   background-color: #ffffc0;
@@ -35,4 +42,40 @@
   margin: 10px;
   padding: 7px;
   width: 340px;
+}
+
+
+.audio-list__title {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.audio-list__list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.audio-list__item {
+  flex: 0 0 auto;
+  padding: .5rem;
+}
+
+.audio-item__number {
+  font-weight: 700;
+}
+
+.audio-parts-list {
+  padding: .5rem;
+}
+
+.audio-parts-list__title {
+  font-weight: 700;
+}
+
+.audio-parts-list__item {
+  background-color: #c0c0c0;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 4px;
+  padding: 4px;
 }
