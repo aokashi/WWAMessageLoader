@@ -6,20 +6,15 @@ WWAの各パーツのメッセージを表示するアプリケーションで�
 
 ブラウザの検索機能を利用すればメッセージを探すことが可能です。
 
-## ビルド方法
+## 使用方法
+[Wiki](https://github.com/aokashi/WWAMessageLoader/wiki) をご参照ください。
+
+## 開発方法
 1. node.js をインストールします。
 2. `npm install` で必要なパッケージをインストールします。
 3. `npm run build` で実行ファイルが `dist` に配置されます。
 
-## 利用方法
-上記のビルドを済ませていない方はビルドをしておきましょう。
-
-1. 表示したいWWAのマップデータを `dist` に配置します。
-2. `index.html` にアクセスします。
-3. マップデータのファイル名を入力し、 送信 を押します。
-4. 結果が表示されます。
-
 ## 謝辞
-- マップデータの読み込みには [WWAWing](https://github.com/WWAWing/WWAWing/) のWWALoader v3.1.6を利用しています。
+- マップデータの読み込みには [WWAWing](https://github.com/WWAWing/WWAWing/) の WWALoader を利用しています。
 - 結果の表示や検索で利用するDOM関連の操作には [Vue.js](https://vuejs.org/) を利用しています。
 - ライセンスはMITライセンスですが、 付属している `wwamap.dat` のライセンスはキャラバンサークルの定める通りに基づきます。
