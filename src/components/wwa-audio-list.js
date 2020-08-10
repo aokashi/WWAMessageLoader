@@ -1,11 +1,10 @@
 import Vue from "vue";
 
-import wwaAudioPartsList from "./wwa-audio-parts-list";
+import wwaAudioItem from "./wwa-audio-item";
 
 const ATTR_TYPE = 3;
 const OBJECT_RANDOM = 16;
 const ATTR_SOUND = 19;
-const BGM_LB = 70;
 const NO_SOUND = 99;
 
 export default Vue.component('wwa-audio-list', {
@@ -20,28 +19,13 @@ export default Vue.component('wwa-audio-list', {
       <div class="audio-list__title">サウンド一覧</div>
       <p>サウンドファイルを再生する際は audio ディレクトリに入れる必要があります。</p>
       <div class="audio-list__list">
-        <div
-          class="audio-list__item audio-item"
+        <wwa-audio-item
           v-for="audioItem in audioList"
           :key="audioItem.number"
-        >
-          <div class="audio-item__number">{{audioItem.number}} 番</div>
-
-          <audio :src="'audio/' + audioItem.number + '.mp3'" controls :loop="isBGM(audioItem.number)"></audio>
-
-          <wwa-audio-parts-list
-            title="使用されている物体パーツ"
-            class="audio-item__parts-list audio-item__parts-list--object"
-            :partsNumbers="audioItem.objectParts"
-          ></wwa-audio-parts-list>
-
-          <wwa-audio-parts-list
-            title="使用されている背景パーツ"
-            class="audio-item__parts-list audio-item__parts-list--map"
-            :partsNumbers="audioItem.mapParts"
-          ></wwa-audio-parts-list>
-
-        </div>
+          :audio-number="audioItem.number"
+          :object-parts-numbers="audioItem.objectParts"
+          :map-parts-numbers="audioItem.mapParts"
+        ></wwa-audio-item>
       </div>
     </div>
   `,
@@ -94,12 +78,7 @@ export default Vue.component('wwa-audio-list', {
       return usedSounds;
     }
   },
-  methods: {
-    isBGM: function(soundNumber) {
-      return soundNumber >= BGM_LB;
-    }
-  },
   component: {
-    'wwa-audio-parts-list': wwaAudioPartsList
+    'wwa-audio-item': wwaAudioItem
   }
 });
