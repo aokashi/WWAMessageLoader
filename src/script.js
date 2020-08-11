@@ -35,6 +35,9 @@ let app = new Vue({
   methods: {
 
     get: function () {
+      this.wwaData = {};
+      this.message = '読み込み中です・・・。';
+
       getData(this.fileName, wwaData => {
         this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
         this.viewType = "MESSAGE";
