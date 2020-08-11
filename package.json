@@ -33,6 +33,7 @@
   "dependencies": {
     "@wwawing/event-emitter": "^3.4.2",
     "@wwawing/loader": "^3.4.2",
+    "@wwawing/styles": "^3.4.2",
     "vue": "^2.6.11"
   }
 }
