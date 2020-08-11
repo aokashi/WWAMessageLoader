@@ -11,13 +11,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.worker\.js$/,
-                use: {
-                    loader: 'worker-loader',
-                    options: {
-                        name: 'wwa_message_loader.worker.js'
-                    }
-                }
+                test: /\.s[ac]ss$/i,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
             }
         ]
     },

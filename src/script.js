@@ -7,6 +7,8 @@ import wwaAudioList from "./components/wwa-audio-list";
 import { BrowserEventEmitter } from "@wwawing/event-emitter";
 import { WWALoader } from "@wwawing/loader";
 
+import "./style.scss";
+
 let app = new Vue({
   el: "#app",
   data: {
