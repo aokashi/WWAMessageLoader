@@ -1,5 +1,7 @@
 import Vue from "vue";
 
+import "@wwawing/styles/output/wwa.css";
+
 export default Vue.component('wwa-parts-message', {
   props: {
     partsMessage: {
@@ -8,9 +10,11 @@ export default Vue.component('wwa-parts-message', {
     }
   },
   template: `
-    <div class="parts-message">
-      <div class="parts-message__line" v-for="(messageLine, messageIndex) in partsMessageEachLine">
-        {{ messageLine }}
+    <div class="parts-message wwa-size-box wwa-message-window">
+      <div class="parts-message__content">
+        <div class="parts-message__line" v-for="(messageLine, messageIndex) in partsMessageEachLine">
+          {{ messageLine }}
+        </div>
       </div>
     </div>
   `,

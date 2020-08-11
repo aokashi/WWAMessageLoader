@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="wwa_message_loader.css">
   <title>WWA MessageLoader</title>
 </head>
 <body class="main">
@@ -17,11 +16,22 @@
       <button class="wml__load-button" v-on:click="get">送信</button>
     </div>
     <p class="wml__message">{{ message }}</p>
-    <wwa-parts-list
-      v-if="hasMessage"
-      :wwa-data="wwaData"
-    >
-    </wwa-parts-list>
+    <div v-if="hasMessage">
+      <div class="wml__nav">
+        <button v-on:click="selectType('MESSAGE')">メッセージ一覧</button>
+        <button v-on:click="selectType('AUDIO')">サウンド番号</button>
+      </div>
+      <wwa-parts-list
+        v-if="viewType === 'MESSAGE'"
+        :wwa-data="wwaData"
+      >
+      </wwa-parts-list>
+      <wwa-audio-list
+        v-if="viewType === 'AUDIO'"
+        :wwa-data="wwaData"
+        :directory-path="directoryPath"
+      ></wwa-audio-list>
+    </div>
   </div>
   <script src="wwa_message_loader.js"></script>
 </body>

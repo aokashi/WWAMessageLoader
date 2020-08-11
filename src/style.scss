@@ -1,0 +1,114 @@
+$object-color: #c00000;
+$map-color: #0000c0;
+
+@mixin label ($bgcolor, $textcolor) {
+  background-color: $bgcolor;
+  color: $textcolor;
+  display: inline-block;
+  font-size: .8rem;
+  font-weight: bold;
+  margin: 4px;
+  padding: 4px;
+}
+
+
+.wml__nav {
+  margin-bottom: 1rem;
+}
+
+.parts-list__list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.parts-item {
+  flex: 0 0 360px;
+
+  &__title {
+    .parts-item--object & {
+      color: $object-color;
+    }
+    .parts-item--map & {
+      color: $map-color;
+    }
+  }
+
+  &__no-put-warn {
+    @include label(#ffffc0, #808000);
+  }
+}
+
+.search-box__type-label--object {
+  color: $object-color;
+}
+.search-box__type-label--map {
+  color: $map-color;
+}
+
+.parts-message {
+  width: 340px;
+  
+  // WWA Wing と限りなく同じ見た目にするために WWA Wing のスタイルシートをそのまま使用し、レイアウトをこのスタイルシートで調整
+  &.wwa-size-box {
+    height: auto!important;
+  }
+
+  &.wwa-message-window {
+    position: static!important;
+  }
+
+  &__content {
+    text-align: left;
+    overflow-wrap: break-word;
+    margin: 0;
+    padding: 7px;
+  }
+}
+
+
+.audio-list {
+  &__title {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__item {
+    flex: 0 0 270px;
+    padding: .5rem;
+  }
+}
+
+.audio-item {
+  &__number {
+    font-weight: 700;
+  }
+  &__is-bgm {
+    @include label(#c0ffc0, #008000);
+  }
+}
+
+.audio-parts-list {
+  padding: .5rem;
+
+  &__title {
+    font-weight: 700;
+    
+    .audio-item__parts-list--object & {
+      color: $object-color;
+    }
+    .audio-item__parts-list--map & {
+      color: $map-color;
+    }
+  }
+}
+
+.audio-parts-list__item {
+  background-color: #c0c0c0;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 4px;
+  padding: 4px;
+}

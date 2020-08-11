@@ -2,15 +2,19 @@
 
 import Vue from "vue";
 import wwaPartsList from "./components/wwa-parts-list";
+import wwaAudioList from "./components/wwa-audio-list";
 
 import { BrowserEventEmitter } from "@wwawing/event-emitter";
 import { WWALoader } from "@wwawing/loader";
+
+import "./style.scss";
 
 let app = new Vue({
   el: "#app",
   data: {
     fileName: '',
     message: 'テキストフォームにマップデータファイル名を入力し、「送信」ボタンを押してください。',
+    viewType: '',
     wwaData: {}
   },
   computed: {
@@ -19,28 +23,45 @@ let app = new Vue({
      */
     hasMessage: function() {
       return Object.entries(this.wwaData).length > 0;
+    },
+    directoryPath: function() {
+      const directoryPath = this.fileName.split("/").slice(0, -1).join("/");
+      if (directoryPath === "") {
+        return ".";
+      }
+      return directoryPath;
     }
   },
   methods: {
 
-    get: function (event) {
-      const self = this;
+    get: function () {
+      this.wwaData = {};
+      this.message = '読み込み中です・・・。';
 
-      getData(this.fileName, function (wwaData) {
-        self.message = self.fileName + ' から読み込んだメッセージの一覧です。';
-        self.wwaData = wwaData;
-      }, function (error) {
+      getData(this.fileName, wwaData => {
+        this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
+        this.viewType = "MESSAGE";
+        this.wwaData = wwaData;
+      }, error => {
         try {
-          self.message = error.message;
+          this.message = error.message;
         } catch {
-          self.message = '不明なエラーが発生しました。';
+          this.message = '不明なエラーが発生しました。';
         }
       });
     },
 
+    /**
+     * @param {string} type 
+     */
+    selectType: function(type) {
+      this.viewType = type;
+    }
+
   },
   components: {
     'wwa-parts-list': wwaPartsList,
+    'wwa-audio-list': wwaAudioList,
   }
 });
 
