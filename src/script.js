@@ -3,18 +3,22 @@
 import Vue from "vue";
 import wwaPartsList from "./components/wwa-parts-list";
 import wwaAudioList from "./components/wwa-audio-list";
+import wwaWorldNumberInput from "./components/wwa-world-number-input";
 
 import { BrowserEventEmitter } from "@wwawing/event-emitter";
 import { WWALoader } from "@wwawing/loader";
 
 import "./style.scss";
 
+const FIRST_MESSAGE = 'テキストフォームにマップデータファイル名を入力し、「送信」ボタンを押してください。';
+
 let app = new Vue({
   el: "#app",
   data: {
     fileName: '',
-    message: 'テキストフォームにマップデータファイル名を入力し、「送信」ボタンを押してください。',
-    viewType: '',
+    message: FIRST_MESSAGE,
+    waitingPassword: false, // 暗証番号入力待ちか？
+    viewType: '', // 表示種類
     wwaData: {}
   },
   computed: {
@@ -22,7 +26,7 @@ let app = new Vue({
      * @returns {boolean}
      */
     hasMessage: function() {
-      return Object.entries(this.wwaData).length > 0;
+      return Object.entries(this.wwaData).length > 0 && !this.waitingPassword;
     },
     directoryPath: function() {
       const directoryPath = this.fileName.split("/").slice(0, -1).join("/");
@@ -35,13 +39,16 @@ let app = new Vue({
   methods: {
 
     get: function () {
-      this.wwaData = {};
+      this.closeMapdata();
       this.message = '読み込み中です・・・。';
 
       getData(this.fileName, wwaData => {
-        this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
-        this.viewType = "MESSAGE";
         this.wwaData = wwaData;
+        if (wwaData.worldPassword !== "") {
+          this.waitingPassword = true;
+          return;
+        }
+        this.setupData();
       }, error => {
         try {
           this.message = error.message;
@@ -52,24 +59,56 @@ let app = new Vue({
     },
 
     /**
+     * 入力した暗証番号を判定します。
+     * @param {object} input wwa-world-number-input.js を参照
+     */
+    receiveWorldNumber: function(input) {
+      const answerWorldPassNumber = Math.floor(this.wwaData.worldPassNumber).toString();
+      if (input.worldNumber !== answerWorldPassNumber) {
+        this.message = "暗証番号が異なります。";
+        this.closeMapdata();
+        return;
+      }
+      this.waitingPassword = false;
+      this.setupData();
+    },
+
+    /**
+     * WWA のデータが見れる状態に整えます。
+     */
+    setupData: function() {
+      this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
+      this.viewType = "MESSAGE";
+    },
+
+    /**
      * @param {string} type 
      */
     selectType: function(type) {
       this.viewType = type;
+    },
+
+    /**
+     * マップデータを閉じます。
+     */
+    closeMapdata: function() {
+      this.wwaData = {};
+      this.waitingPassword = false;
     }
 
   },
   components: {
     'wwa-parts-list': wwaPartsList,
     'wwa-audio-list': wwaAudioList,
+    'wwa-world-number-input': wwaWorldNumberInput
   }
 });
 
 /**
  * データを取得します。
  * @param {string} fileName 
- * @param {function} callbackFunction
- * @param {function} console.error
+ * @param {function} callbackFunction マップデータの読み込みに成功した場面に実行される関数
+ * @param {function} errorFunction エラー発生時に実行される関数
  */
 function getData(fileName, callbackFunction, errorFunction) {
   const eventEmitter = new BrowserEventEmitter();

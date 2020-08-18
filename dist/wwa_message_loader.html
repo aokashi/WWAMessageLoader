@@ -11,11 +11,15 @@
     <h1 class="header__title">WWA MessageLoader</h1>
   </header>
   <div id="app" class="wml">
-    <div class="wml__toolbar">
+    <form class="wml__toolbar" @submit.prevent="get">
       <input class="wml__file-name" v-model="fileName" type="text">
       <button class="wml__load-button" v-on:click="get">送信</button>
-    </div>
+    </form>
     <p class="wml__message">{{ message }}</p>
+    <wwa-world-number-input
+      v-if="waitingPassword"
+      v-on:submit="receiveWorldNumber"
+    ></wwa-world-number-input>
     <div v-if="hasMessage">
       <div class="wml__nav">
         <button v-on:click="selectType('MESSAGE')">メッセージ一覧</button>
@@ -24,8 +28,7 @@
       <wwa-parts-list
         v-if="viewType === 'MESSAGE'"
         :wwa-data="wwaData"
-      >
-      </wwa-parts-list>
+      ></wwa-parts-list>
       <wwa-audio-list
         v-if="viewType === 'AUDIO'"
         :wwa-data="wwaData"
