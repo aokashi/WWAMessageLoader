@@ -139,6 +139,3 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/node,vuejs,macos,windows
-
-dist/wwa_message_loader.js
-dist/wwa_message_loader.worker.js
