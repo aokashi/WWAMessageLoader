@@ -6,27 +6,31 @@ export default Vue.component('search-box', {
     <div class="search-box">
       <fieldset>
         <legend>検索</legend>
-        <div class="search-box__item">
-        <input class="search-box__query" v-model="query" type="text">
-        </div>
-        
-        <div class="search-box__item">
-          <input v-model="type" id="search-type-no" type="radio" :value="partsType.PARTSTYPE_UNDEFINED">
-          <label class="search-box__type-label--no" for="search-type-no">指定なし</label>
-          <input v-model="type" id="search-type-object" type="radio" :value="partsType.PARTSTYPE_OBJECT">
-          <label class="search-box__type-label--object" for="search-type-object">物体パーツ</label>
-          <input v-model="type" id="search-type-map" type="radio" :value="partsType.PARTSTYPE_MAP">
-          <label class="search-box__type-label--map" for="search-type-map">背景パーツ</label>
-        </div>
-        
-        <div class="search-box__item">
-          <input class="search-box__only-parts" v-model="onlyPartsMessage" id="search-only-parts-message" type="checkbox">
-          <label for="search-only-parts-message">パーツのメッセージのみ</label>
-        </div>
-        
-        <div class="search-box__item">
-          <button class="search-box__search-button" @click="searchEvent" type="button">検索</button>
-        </div>
+        <form @submit.prevent="searchEvent">
+
+          <div class="search-box__item">
+          <input class="search-box__query" v-model="query" type="text">
+          </div>
+
+          <div class="search-box__item">
+            <input v-model="type" id="search-type-no" type="radio" :value="partsType.PARTSTYPE_UNDEFINED">
+            <label class="search-box__type-label--no" for="search-type-no">指定なし</label>
+            <input v-model="type" id="search-type-object" type="radio" :value="partsType.PARTSTYPE_OBJECT">
+            <label class="search-box__type-label--object" for="search-type-object">物体パーツ</label>
+            <input v-model="type" id="search-type-map" type="radio" :value="partsType.PARTSTYPE_MAP">
+            <label class="search-box__type-label--map" for="search-type-map">背景パーツ</label>
+          </div>
+
+          <div class="search-box__item">
+            <input class="search-box__only-parts" v-model="onlyPartsMessage" id="search-only-parts-message" type="checkbox">
+            <label for="search-only-parts-message">パーツのメッセージのみ</label>
+          </div>
+
+          <div class="search-box__item">
+            <button class="search-box__search-button" @click="searchEvent" type="button">検索</button>
+          </div>
+
+        </form>
       </fieldset>
     </div>
   `,
