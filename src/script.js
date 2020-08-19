@@ -38,24 +38,20 @@ let app = new Vue({
   },
   methods: {
 
+    /**
+     * WWA マップデータを取得します。
+     *     暗証番号が含まれている場合はデータに含めず、暗証番号の入力を求めます。
+     */
     get: function () {
       this.closeMapdata();
       this.message = '読み込み中です・・・。';
-
       getData(this.fileName, wwaData => {
-        this.wwaData = wwaData;
         if (wwaData.worldPassword !== "") {
           this.waitingPassword = true;
           return;
         }
-        this.setupData();
-      }, error => {
-        try {
-          this.message = error.message;
-        } catch {
-          this.message = '不明なエラーが発生しました。';
-        }
-      });
+        this.setupData(wwaData);
+      }, this.showError.bind(this));
     },
 
     /**
@@ -63,26 +59,31 @@ let app = new Vue({
      * @param {object} input wwa-world-number-input.js を参照
      */
     receiveWorldNumber: function(input) {
-      const answerWorldPassNumber = Math.floor(this.wwaData.worldPassNumber).toString();
-      if (input.worldNumber !== answerWorldPassNumber) {
-        this.message = "暗証番号が異なります。";
-        this.closeMapdata();
-        return;
-      }
-      this.waitingPassword = false;
-      this.setupData();
+      getData(this.fileName, wwaData => {
+        const answerWorldPassNumber = Math.floor(wwaData.worldPassNumber).toString();
+        if (input.worldNumber !== answerWorldPassNumber) {
+          this.message = '暗証番号が異なります';
+          this.closeMapdata();
+          return;
+        }
+        this.setupData(wwaData);
+      }, this.showError.bind(this));
     },
 
     /**
      * WWA のデータが見れる状態に整えます。
+     * @param {object} wwaData WWAデータ
      */
-    setupData: function() {
+    setupData: function(wwaData) {
+      this.wwaData = wwaData;
+      this.waitingPassword = false;
       this.message = this.fileName + ' から読み込んだメッセージの一覧です。';
       this.viewType = "MESSAGE";
     },
 
     /**
-     * @param {string} type 
+     * 表示種類を切り替えます。
+     * @param {string} type 切り替える表示種類
      */
     selectType: function(type) {
       this.viewType = type;
@@ -94,6 +95,19 @@ let app = new Vue({
     closeMapdata: function() {
       this.wwaData = {};
       this.waitingPassword = false;
+      this.viewType = "";
+    },
+
+    /**
+     * エラーを発生させます。主に後述の getData メソッドでのエラー発生時に使用します。
+     * @param {object} error
+     */
+    showError: function(error) {
+      try {
+        this.message = error.message;
+      } catch {
+        this.message = '不明なエラーが発生しました。';
+      }
     }
 
   },
