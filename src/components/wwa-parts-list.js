@@ -22,6 +22,9 @@ export default Vue.component('wwa-parts-list', {
           :parts="partsObject">
           {{ partsObject.message }}
         </wwa-parts>
+        <div class="parts-list__message" v-if="!hasEntries(partsObjects)">
+          該当するメッセージは見つかりませんでした。
+        </div>
       </div>
     </div>
   `,
@@ -86,6 +89,7 @@ export default Vue.component('wwa-parts-list', {
     }
   },
   methods: {
+
     /**
      * @param {number} messageID 
      * @return {array} 以下の情報を返す連想配列
@@ -118,12 +122,21 @@ export default Vue.component('wwa-parts-list', {
         number: 0
       };
     },
+
     /**
      * 検索を行います。
      * @param {Object} search 
      */
     setSearch: function(search) {
       this.search = search;
+    },
+
+    /**
+     * 指定したオブジェクトの件数を調べます。
+     * @param {Object} object 
+     */
+    hasEntries: function(object) {
+      return Object.entries(object).length > 0;
     }
   },
   components: {

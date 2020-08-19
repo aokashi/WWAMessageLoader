@@ -16,9 +16,16 @@ $map-color: #0000c0;
   margin-bottom: 1rem;
 }
 
-.parts-list__list {
-  display: flex;
-  flex-wrap: wrap;
+.parts-list {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__message {
+    padding: 1rem .5rem;
+    font-size: 1.25rem;
+  }
 }
 
 .parts-item {
