@@ -1,0 +1,45 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "command": "npm start",
+            "name": "Run npm start",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "url": "http://localhost:8080/wwa_message_loader.html",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "name": "Launch Firefox",
+            "url": "http://localhost:8080/wwa_message_loader.html"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Debug on Chrome",
+            "configurations": [
+                "Run npm start",
+                "Launch Chrome"
+            ]
+        },
+        {
+            "name": "Debug on Firefox",
+            "configurations": [
+                "Run npm start",
+                "Launch Firefox"
+            ]
+        }
+    ]
+}
